@@ -14,8 +14,10 @@ export function Hero() {
 
   // Fungsi placeholder untuk download resume
   const handleDownloadResume = () => {
-    // Pastikan kamu punya file resume.pdf di folder public
-    window.open("/resume.pdf", "_blank");
+    window.open(
+      "https://drive.google.com/file/d/1E4XBjIYwG3Mp1LVOzH8UUvXslmJ1j7M_/view?usp=sharing",
+      "_blank",
+    );
   };
 
   return (

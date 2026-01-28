@@ -24,88 +24,145 @@ export default function Home() {
   const [showAnimation, setShowAnimation] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
   const slideContainerRef = useRef<HTMLDivElement>(null);
+  const touchStartY = useRef<number>(0);
+  const touchEndY = useRef<number>(0);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // 1. TIMER RESET (PENTING: Agar tidak terkunci selamanya)
+  // Timer Reset
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isTransitioning) {
       timer = setTimeout(() => {
         setIsTransitioning(false);
-      }, 700);
+      }, 700); // Durasi harus sama dengan duration-700 di CSS
     }
     return () => clearTimeout(timer);
   }, [isTransitioning]);
 
-  // 2. LOGIKA SCROLL PINTAR (SMART SCROLL DETECTION)
+  // --- LOGIKA SCROLL PINTAR (Mouse & Touch) ---
+  // (Logika ini tidak berubah dari sebelumnya, tetap mendeteksi mentok atas/bawah)
   useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      // Blokir jika sedang transisi
-      if (isTransitioning || showAnimation) return;
+    const checkScrollStatus = (element: HTMLElement) => {
+      const tolerance = 2;
+      const { scrollTop, scrollHeight, clientHeight } = element;
+      const isScrollable = scrollHeight > clientHeight;
+      const isAtTop = scrollTop <= tolerance;
+      const isAtBottom =
+        Math.ceil(scrollTop + clientHeight) >= scrollHeight - tolerance;
+      return { isScrollable, isAtTop, isAtBottom };
+    };
 
-      const container = slideContainerRef.current;
-      if (!container) return;
-
-      // Ambil slide wrapper yang sedang aktif
-      const slideElements = container.querySelectorAll("[data-slide-content]");
-      const activeSlide = slideElements[currentSlide] as HTMLElement;
-
-      if (!activeSlide) return;
-
-      // --- DETEKSI SCROLL CONTAINER YANG SEBENARNYA ---
-      // Kita cari elemen mana yang kena scroll (bisa jadi komponen anak seperti About, atau wrapper itu sendiri)
+    const findScrollTarget = (
+      target: HTMLElement,
+      container: HTMLElement,
+      activeSlide: HTMLElement,
+    ) => {
       let scrollTarget = activeSlide;
-      let target = e.target as HTMLElement;
       let foundScrollable = false;
+      let currentTarget = target;
 
-      // Loop dari elemen yang di-hover mouse naik ke atas sampai ketemu container yang bisa di-scroll
-      while (target && target !== container.parentElement) {
-        // Cek apakah elemen ini punya overflow dan kontennya panjang
-        const style = window.getComputedStyle(target);
+      while (currentTarget && currentTarget !== container.parentElement) {
+        const style = window.getComputedStyle(currentTarget);
         const overflowY = style.overflowY;
-        const isOverflow = overflowY === "auto" || overflowY === "scroll";
-        const canScroll = target.scrollHeight > target.clientHeight;
+        const canScroll =
+          currentTarget.scrollHeight > currentTarget.clientHeight;
 
-        if (isOverflow && canScroll) {
-          scrollTarget = target;
+        if ((overflowY === "auto" || overflowY === "scroll") && canScroll) {
+          scrollTarget = currentTarget;
           foundScrollable = true;
           break;
         }
-
-        // Jangan mencari keluar dari slide aktif
-        if (target === activeSlide) break;
-        target = target.parentElement as HTMLElement;
+        if (currentTarget === activeSlide) break;
+        currentTarget = currentTarget.parentElement as HTMLElement;
       }
+      return { scrollTarget, foundScrollable };
+    };
 
-      // --- LOGIKA NAVIGASI ---
-      const direction = e.deltaY > 0 ? 1 : -1; // 1 = turun, -1 = naik
-
+    const handleWheel = (e: WheelEvent) => {
+      if (isTransitioning || showAnimation) return;
+      const container = slideContainerRef.current;
+      if (!container) return;
+      const slideElements = container.querySelectorAll("[data-slide-content]");
+      const activeSlide = slideElements[currentSlide] as HTMLElement;
+      if (!activeSlide) return;
+      const { scrollTarget, foundScrollable } = findScrollTarget(
+        e.target as HTMLElement,
+        container,
+        activeSlide,
+      );
+      const { isAtTop, isAtBottom } = checkScrollStatus(scrollTarget);
+      const direction = e.deltaY > 0 ? 1 : -1;
       if (foundScrollable) {
-        // Toleransi kecil untuk mengatasi masalah sub-pixel rendering di browser
-        const tolerance = 2;
-        const { scrollTop, scrollHeight, clientHeight } = scrollTarget;
-
-        const isAtTop = scrollTop <= tolerance;
-        const isAtBottom =
-          Math.ceil(scrollTop + clientHeight) >= scrollHeight - tolerance;
-
-        // JIKA konten masih bisa di-scroll ke arah yang diinginkan user -> BIARKAN BROWSER SCROLL
         if (direction > 0 && !isAtBottom) return;
         if (direction < 0 && !isAtTop) return;
       }
-
-      // Jika tidak ada yang bisa di-scroll, ATAU sudah mentok -> PINDAH SLIDE
       e.preventDefault();
-
       const nextSlide = Math.max(
         0,
         Math.min(SLIDES.length - 1, currentSlide + direction),
       );
+      if (nextSlide !== currentSlide) {
+        setIsTransitioning(true);
+        setCurrentSlide(nextSlide);
+      }
+    };
 
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isTransitioning || showAnimation) return;
+      const container = slideContainerRef.current;
+      if (!container) return;
+      const slideElements = container.querySelectorAll("[data-slide-content]");
+      const activeSlide = slideElements[currentSlide] as HTMLElement;
+      if (!activeSlide) return;
+      const currentY = e.touches[0].clientY;
+      const diff = touchStartY.current - currentY;
+      const direction = diff > 0 ? 1 : -1;
+      const { scrollTarget, foundScrollable } = findScrollTarget(
+        e.target as HTMLElement,
+        container,
+        activeSlide,
+      );
+      const { isAtTop, isAtBottom } = checkScrollStatus(scrollTarget);
+      if (foundScrollable) {
+        if (direction > 0 && !isAtBottom) return;
+        if (direction < 0 && !isAtTop) return;
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (isTransitioning || showAnimation) return;
+      const container = slideContainerRef.current;
+      if (!container) return;
+      touchEndY.current = e.changedTouches[0].clientY;
+      const diff = touchStartY.current - touchEndY.current;
+      const direction = diff > 0 ? 1 : -1;
+      if (Math.abs(diff) < 50) return;
+      const slideElements = container.querySelectorAll("[data-slide-content]");
+      const activeSlide = slideElements[currentSlide] as HTMLElement;
+      if (!activeSlide) return;
+      const { scrollTarget, foundScrollable } = findScrollTarget(
+        e.target as HTMLElement,
+        container,
+        activeSlide,
+      );
+      const { isAtTop, isAtBottom } = checkScrollStatus(scrollTarget);
+      if (foundScrollable) {
+        if (direction > 0 && !isAtBottom) return;
+        if (direction < 0 && !isAtTop) return;
+      }
+      const nextSlide = Math.max(
+        0,
+        Math.min(SLIDES.length - 1, currentSlide + direction),
+      );
       if (nextSlide !== currentSlide) {
         setIsTransitioning(true);
         setCurrentSlide(nextSlide);
@@ -114,10 +171,8 @@ export default function Home() {
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (isTransitioning || showAnimation) return;
-
       let nextSlide = currentSlide;
       let shouldNavigate = false;
-
       if (e.key === "ArrowDown") {
         e.preventDefault();
         nextSlide = Math.min(SLIDES.length - 1, currentSlide + 1);
@@ -135,20 +190,24 @@ export default function Home() {
         nextSlide = 0;
         shouldNavigate = true;
       }
-
       if (shouldNavigate && nextSlide !== currentSlide) {
         setIsTransitioning(true);
         setCurrentSlide(nextSlide);
       }
     };
 
-    // Pasang listener dengan { passive: false } agar bisa preventDefault
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("touchstart", handleTouchStart, { passive: false });
+    window.addEventListener("touchmove", handleTouchMove, { passive: false });
+    window.addEventListener("touchend", handleTouchEnd, { passive: false });
 
     return () => {
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, [currentSlide, isTransitioning, showAnimation]);
 
@@ -188,18 +247,24 @@ export default function Home() {
             <section
               key={slide.id}
               id={slide.id}
-              className="absolute inset-0 w-full h-full transition-all duration-700 ease-in-out"
+              // PERUBAHAN 1: Gunakan transition-transform agar lebih performant
+              className="absolute inset-0 w-full h-full transition-transform duration-700 ease-in-out will-change-transform"
               style={{
-                opacity: currentSlide === index ? 1 : 0,
-                pointerEvents: currentSlide === index ? "auto" : "none",
                 zIndex: currentSlide === index ? 10 : 0,
-                transform: currentSlide === index ? "scale(1)" : "scale(0.95)",
+                pointerEvents: currentSlide === index ? "auto" : "none",
+
+                // PERUBAHAN 2: LOGIKA ANIMASI HORIZONTAL (KE SAMPING)
+                // - Jika slide aktif: posisi 0 (tengah)
+                // - Jika slide sebelumnya (index lebih kecil): posisi -100% (kiri layar)
+                // - Jika slide berikutnya (index lebih besar): posisi 100% (kanan layar)
+                transform:
+                  currentSlide === index
+                    ? "translateX(0%)"
+                    : index < currentSlide
+                      ? "translateX(-100%)"
+                      : "translateX(100%)",
               }}
             >
-              {/* HAPUS overflow-y-auto dari sini agar tidak double scrollbar 
-                 jika komponen anak sudah punya scrollbar.
-                 Tetapi kita tetap kasih 'data-slide-content' sebagai marker.
-              */}
               <div data-slide-content className="w-full h-full">
                 <Component />
               </div>
