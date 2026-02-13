@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { EmailOpening } from "@/components/email-opening";
+import { IntroEnvelope } from "@/components/intro-envelope";
 import { SlideNavigation } from "@/components/slide-navigation";
 import { Hero } from "@/components/hero";
 import { About } from "@/components/about";
@@ -229,14 +229,13 @@ export default function Home() {
 
   return (
     <main className="w-full h-screen bg-background text-foreground overflow-hidden flex flex-col relative">
-      {showAnimation && <EmailOpening onComplete={handleAnimationComplete} />}
+      {showAnimation && <IntroEnvelope onComplete={handleAnimationComplete} />}
 
       <SlideNavigation
         totalSlides={SLIDES.length}
         currentSlide={currentSlide}
         onNavigate={handleNavigate}
       />
-
       <div
         ref={slideContainerRef}
         className="relative w-full h-full overflow-hidden"
