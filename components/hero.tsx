@@ -93,7 +93,7 @@ export function Hero() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
             </span>
             <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-              Available for work
+              Available for new opportunities
             </span>
           </div>
         </div>
