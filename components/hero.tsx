@@ -203,9 +203,5 @@ export function Hero() {
         }
       `}</style>
     </div>
-<<<<<<< HEAD
   );
-=======
-  )
->>>>>>> 03c722852cfb9dde89e20795dba4a15aba316ffc
 }
