@@ -147,7 +147,7 @@ const PROJECTS_DATA = [
     id: 12,
     title: "Sistem Pakar (Tugas Pemvis)",
     description:
-      "Aplikasi desktop sistem pakar dengan metode Forward Chaining untuk memberikan rekomendasi jurusan kuliah berdasarkan profil siswa.",
+      "A comprehensive desktop-based expert system developed as a visual programming assignment. It leverages a Forward Chaining inference engine to provide accurate university major recommendations by analyzing a student's academic profile, interests, and talents. The application is built with Java Swing, features a modern FlatLaf dark theme UI, and is fully integrated with a MySQL database for managing master data, dynamic rule bases, and consultation reports.",
     image: "/Images/projects/SistemPakar.png",
     link: "",
     github: "https://github.com/ALVINfrs/Tugas_Pemvis",
@@ -160,7 +160,7 @@ const PROJECTS_DATA = [
     id: 13,
     title: "VibeX App",
     description:
-      "Fullstack web app interaktif dengan fitur real-time. Menggunakan arsitektur modern untuk performa dan pengalaman pengguna yang maksimal.",
+      "VibeX is a Neo-Brutalist social super-app built as an advanced web programming project[cite: 1]. It seamlessly integrates microblogging, visual content like Stories and Reels, and real-time chat with Google Gemini AI intelligence[cite: 1]. Developed using a robust stack featuring Laravel 12, React 19, and Supabase for PostgreSQL, Authentication, and Storage[cite: 1]. The platform introduces unique standout features such as an Alter-Ego mode for dual personas, a Zen Mode focus scroll to prevent doomscrolling, Time-Capsule posts, and embedded AI for auto-captioning, toxicity filtering, and an in-chat assistant[cite: 1].",
     image: "/Images/projects/VibexApp.png",
     link: "",
     github: "https://github.com/ALVINfrs/VibeX-app",
@@ -173,13 +173,26 @@ const PROJECTS_DATA = [
     id: 14,
     title: "CNN Aritmia Detection",
     description:
-      "Model Machine Learning menggunakan algoritma Convolutional Neural Network (CNN) untuk klasifikasi penyakit aritmia jantung.",
+      "An advanced Machine Learning project focused on the healthcare domain, specifically designed to detect and classify cardiac arrhythmia conditions. The model utilizes a robust 1D Convolutional Neural Network (1D CNN) architecture to analyze time-series ECG readings from the widely recognized MIT-BIH Arrhythmia Database. It successfully classifies the physiological data into 5 distinct heartbeat classes. Implemented entirely in Python using TensorFlow within a Jupyter Notebook environment, this project aims to assist in accurate and early cardiovascular diagnostics.",
     image: "/Images/projects/Cnn.png",
     link: "",
     github: "https://github.com/ALVINfrs/CNN-Aritmia",
     tags: ["machine-learning", "ai", "python"],
     tech: ["Python", "TensorFlow", "Jupyter Notebook"],
     category: "machine-learning",
+    featured: true,
+  },
+  {
+    id: 15,
+    title: "React Snacks Co. Landing Page",
+    description:
+      "A modern and engaging landing page developed for 'REACT Snacks Studio', an innovative IT-themed culinary entrepreneurship project created for a university assignment. The platform showcases a variety of spicy local snacks—such as Makaroni, Lidi-lidian, and Basreng—cleverly branded with web development and React.js component naming conventions. Built with a responsive design to establish a strong digital presence and attract customers.",
+    image: "/Images/projects/ReactSnacks.png",
+    link: "https://react-snacks-co.vercel.app/",
+    github: "https://github.com/ALVINfrs/Landningpage-React-Snacks.co",
+    tags: ["frontend", "landing-page", "react", "entrepreneurship"],
+    tech: ["React", "Tailwind CSS", "Vercel"],
+    category: "frontend",
     featured: true,
   },
 ];
