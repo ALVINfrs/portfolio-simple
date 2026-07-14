@@ -143,6 +143,45 @@ const PROJECTS_DATA = [
     tech: ["Hapi.js", "Node.js"],
     category: "backend",
   },
+  {
+    id: 12,
+    title: "Sistem Pakar (Tugas Pemvis)",
+    description:
+      "Aplikasi desktop sistem pakar dengan metode Forward Chaining untuk memberikan rekomendasi jurusan kuliah berdasarkan profil siswa.",
+    image: "/Images/projects/SistemPakar.png",
+    link: "",
+    github: "https://github.com/ALVINfrs/Tugas_Pemvis",
+    tags: ["desktop", "java", "sistem-pakar", "mysql"],
+    tech: ["Java Swing", "MySQL", "FlatLaf", "Forward Chaining"],
+    category: "desktop",
+    featured: true,
+  },
+  {
+    id: 13,
+    title: "VibeX App",
+    description:
+      "Fullstack web app interaktif dengan fitur real-time. Menggunakan arsitektur modern untuk performa dan pengalaman pengguna yang maksimal.",
+    image: "/Images/projects/VibexApp.png",
+    link: "",
+    github: "https://github.com/ALVINfrs/VibeX-app",
+    tags: ["fullstack", "react", "laravel", "supabase"],
+    tech: ["React 19", "Laravel 12", "Supabase", "Tailwind v4", "TypeScript"],
+    category: "fullstack",
+    featured: true,
+  },
+  {
+    id: 14,
+    title: "CNN Aritmia Detection",
+    description:
+      "Model Machine Learning menggunakan algoritma Convolutional Neural Network (CNN) untuk klasifikasi penyakit aritmia jantung.",
+    image: "/Images/projects/Cnn.png",
+    link: "",
+    github: "https://github.com/ALVINfrs/CNN-Aritmia",
+    tags: ["machine-learning", "ai", "python"],
+    tech: ["Python", "TensorFlow", "Jupyter Notebook"],
+    category: "machine-learning",
+    featured: true,
+  },
 ];
 
 const CATEGORIES = [

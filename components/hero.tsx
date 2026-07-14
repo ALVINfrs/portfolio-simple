@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import React, { useEffect, useState } from 'react'
-import { ArrowRight, Download, Terminal } from 'lucide-react'
+import React, { useEffect, useState } from "react";
+import { ArrowRight, Download, Terminal } from "lucide-react";
 
 // --- 1. KOMPONEN TYPEWRITER ---
 const ROLES = [
@@ -9,35 +9,35 @@ const ROLES = [
   "Fullstack Developer",
   "Informatics Student",
   "Problem Solver",
-]
+];
 
 function TypewriterEffect() {
-  const [text, setText] = useState("")
-  const [roleIndex, setRoleIndex] = useState(0)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [delta, setDelta] = useState(150)
+  const [text, setText] = useState("");
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [delta, setDelta] = useState(150);
 
   useEffect(() => {
     const ticker = setInterval(() => {
-      const currentRole = ROLES[roleIndex]
+      const currentRole = ROLES[roleIndex];
       if (isDeleting) {
-        setText((prev) => currentRole.substring(0, prev.length - 1))
-        setDelta(50)
+        setText((prev) => currentRole.substring(0, prev.length - 1));
+        setDelta(50);
       } else {
-        setText((prev) => currentRole.substring(0, prev.length + 1))
-        setDelta(150)
+        setText((prev) => currentRole.substring(0, prev.length + 1));
+        setDelta(150);
       }
       if (!isDeleting && text === currentRole) {
-        setDelta(2000)
-        setIsDeleting(true)
+        setDelta(2000);
+        setIsDeleting(true);
       } else if (isDeleting && text === "") {
-        setIsDeleting(false)
-        setRoleIndex((prev) => (prev + 1) % ROLES.length)
-        setDelta(500)
+        setIsDeleting(false);
+        setRoleIndex((prev) => (prev + 1) % ROLES.length);
+        setDelta(500);
       }
-    }, delta)
-    return () => clearInterval(ticker)
-  }, [text, isDeleting, roleIndex, delta])
+    }, delta);
+    return () => clearInterval(ticker);
+  }, [text, isDeleting, roleIndex, delta]);
 
   return (
     <span className="inline-flex items-center text-left min-h-[1.5em]">
@@ -45,7 +45,7 @@ function TypewriterEffect() {
       <span className="animate-pulse ml-0.5 text-slate-400">|</span>
       <Terminal className="ml-2 w-4 h-4 sm:w-5 sm:h-5 text-slate-500/70" />
     </span>
-  )
+  );
 }
 
 export function Hero() {
@@ -54,18 +54,17 @@ export function Hero() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
-  }
+  };
 
   const handleDownloadResume = () => {
     window.open(
-      "https://drive.google.com/file/d/1E4XBjIYwG3Mp1LVOzH8UUvXslmJ1j7M_/view?usp=sharing",
+      "https://drive.google.com/file/d/1QjSd3W5A4N7QbdumDpjBEdN8QQpkxD6g/view?usp=sharing",
       "_blank",
-    )
-  }
+    );
+  };
 
   return (
     <div className="relative w-full min-h-[100dvh] flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-background overflow-hidden">
-      
       {/* --- BACKGROUND EFFECTS --- */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none">
         <div className="absolute inset-0 bg-background/90 [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
@@ -81,7 +80,6 @@ export function Hero() {
 
       {/* --- MAIN CONTENT --- */}
       <div className="relative z-10 w-full max-w-4xl mx-auto text-center flex flex-col items-center gap-6 sm:gap-8">
-        
         {/* Status Badge */}
         <div
           className="opacity-0 animate-fade-up"
@@ -114,12 +112,12 @@ export function Hero() {
             className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed text-balance opacity-0 animate-fade-up flex flex-col items-center justify-center gap-1 sm:block"
             style={{ animationDelay: "500ms", animationFillMode: "forwards" }}
           >
-            <span>A passionate</span>{' '}
+            <span>A passionate</span>{" "}
             <span className="font-semibold text-slate-400 inline-flex flex-wrap justify-center sm:justify-start">
               <TypewriterEffect />
             </span>
             <span className="block sm:inline sm:ml-1">
-               crafting scalable, pixel-perfect digital experiences.
+              crafting scalable, pixel-perfect digital experiences.
             </span>
           </div>
         </div>
@@ -153,17 +151,26 @@ export function Hero() {
       </div>
 
       {/* --- SCROLL INDICATORS --- */}
-      <div className="absolute bottom-12 right-8 hidden lg:flex flex-col items-center gap-4 z-20 opacity-0 animate-fade-in"
-           style={{ animationDelay: "1500ms", animationFillMode: "forwards" }}>
+      <div
+        className="absolute bottom-12 right-8 hidden lg:flex flex-col items-center gap-4 z-20 opacity-0 animate-fade-in"
+        style={{ animationDelay: "1500ms", animationFillMode: "forwards" }}
+      >
         <div className="h-16 w-[1px] bg-gradient-to-b from-transparent via-muted-foreground/50 to-transparent" />
-        <div className="writing-vertical-rl text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 animate-pulse transform rotate-180" style={{ writingMode: 'vertical-rl' }}>
+        <div
+          className="writing-vertical-rl text-[10px] uppercase tracking-[0.3em] text-muted-foreground/60 animate-pulse transform rotate-180"
+          style={{ writingMode: "vertical-rl" }}
+        >
           Scroll to explore
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex lg:hidden flex-col items-center gap-2 opacity-0 animate-fade-up z-10 pointer-events-none"
-           style={{ animationDelay: "1200ms", animationFillMode: "forwards" }}>
-        <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 animate-pulse">Scroll</span>
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex lg:hidden flex-col items-center gap-2 opacity-0 animate-fade-up z-10 pointer-events-none"
+        style={{ animationDelay: "1200ms", animationFillMode: "forwards" }}
+      >
+        <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 animate-pulse">
+          Scroll
+        </span>
         <div className="w-[20px] h-[32px] rounded-full border-2 border-muted-foreground/20 flex justify-center p-1 backdrop-blur-sm">
           <div className="w-1 h-1.5 bg-foreground/40 rounded-full animate-scroll-wheel" />
         </div>
@@ -171,20 +178,30 @@ export function Hero() {
 
       <style jsx>{`
         @keyframes gradient-text {
-          0% { background-position: 0% 50%; }
-          100% { background-position: 200% 50%; }
+          0% {
+            background-position: 0% 50%;
+          }
+          100% {
+            background-position: 200% 50%;
+          }
         }
         .animate-gradient-text {
           animation: gradient-text 3s linear infinite;
         }
         @keyframes scroll-wheel {
-          0% { transform: translateY(0); opacity: 1; }
-          100% { transform: translateY(10px); opacity: 0; }
+          0% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(10px);
+            opacity: 0;
+          }
         }
         .animate-scroll-wheel {
           animation: scroll-wheel 1.5s ease-out infinite;
         }
       `}</style>
     </div>
-  )
+  );
 }
